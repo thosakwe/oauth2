@@ -55,8 +55,7 @@ void main() {
       httpClient.expectRequest((request) {
         expect(request.method, equals('GET'));
         expect(request.url.toString(), equals(requestUri.toString()));
-        expect(request.headers['authorization'],
-            equals('Bearer access token'));
+        expect(request.headers['authorization'], equals('Bearer access token'));
 
         return Future.value(http.Response('good job', 200));
       });

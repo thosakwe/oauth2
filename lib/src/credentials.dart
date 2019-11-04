@@ -127,8 +127,7 @@ class Credentials {
   factory Credentials.fromJson(String json) {
     validate(condition, message) {
       if (condition) return;
-      throw FormatException(
-          "Failed to load credentials: $message.\n\n$json");
+      throw FormatException("Failed to load credentials: $message.\n\n$json");
     }
 
     var parsed;

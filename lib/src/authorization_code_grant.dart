@@ -324,12 +324,12 @@ class _State {
   // [AuthorizationCodeGrant.getAuthorizationUrl] has been called but neither
   // [AuthorizationCodeGrant.handleAuthorizationResponse] nor
   // [AuthorizationCodeGrant.handleAuthorizationCode] has been called.
-  static const awaitingResponse =  _State("awaiting response");
+  static const awaitingResponse = _State("awaiting response");
 
   // [AuthorizationCodeGrant.getAuthorizationUrl] and either
   // [AuthorizationCodeGrant.handleAuthorizationResponse] or
   // [AuthorizationCodeGrant.handleAuthorizationCode] have been called.
-  static const finished =  _State("finished");
+  static const finished = _State("finished");
 
   final String _name;
 

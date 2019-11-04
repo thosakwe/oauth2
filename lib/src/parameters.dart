@@ -28,6 +28,5 @@ Map<String, dynamic> parseJsonParameters(MediaType contentType, String body) {
     return untypedParameters;
   }
 
-  throw FormatException(
-      'Parameters must be a map, was "$untypedParameters"');
+  throw FormatException('Parameters must be a map, was "$untypedParameters"');
 }

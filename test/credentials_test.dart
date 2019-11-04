@@ -205,8 +205,7 @@ void main() {
               "Basic aWQlQzMlQUJudCVDNCVBQmZpZXI6cyVDMyVBQmNyZXQ="));
 
       return Future.value(http.Response(
-          jsonEncode(
-              {'access_token': 'access token', 'token_type': 'bearer'}),
+          jsonEncode({'access_token': 'access token', 'token_type': 'bearer'}),
           200,
           headers: {'content-type': 'application/json'}));
     });
@@ -286,13 +285,12 @@ void main() {
     });
 
     test("should throw a FormatException for invalid JSON", () {
-      expect(() => oauth2.Credentials.fromJson("foo bar"),
-          throwsFormatException);
+      expect(
+          () => oauth2.Credentials.fromJson("foo bar"), throwsFormatException);
     });
 
     test("should throw a FormatException for JSON that's not a map", () {
-      expect(
-          () => oauth2.Credentials.fromJson("null"), throwsFormatException);
+      expect(() => oauth2.Credentials.fromJson("null"), throwsFormatException);
     });
 
     test("should throw a FormatException if there is no accessToken", () {
