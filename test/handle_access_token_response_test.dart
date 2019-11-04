@@ -15,7 +15,7 @@ import 'utils.dart';
 
 final Uri tokenEndpoint = Uri.parse("https://example.com/token");
 
-final DateTime startTime = new DateTime.now();
+final DateTime startTime = DateTime.now();
 
 oauth2.Credentials handle(http.Response response,
         {GetParameters getParameters}) =>
@@ -31,7 +31,7 @@ void main() {
             Map<String, String> headers = const {
               "content-type": "application/json"
             }}) =>
-        handle(new http.Response(body, statusCode, headers: headers));
+        handle(http.Response(body, statusCode, headers: headers));
 
     test('causes an AuthorizationException', () {
       expect(() => handleError(), throwsAuthorizationException);
@@ -121,7 +121,7 @@ void main() {
         expiresIn,
         refreshToken,
         scope}) {
-      return handle(new http.Response(
+      return handle(http.Response(
           jsonEncode({
             'access_token': accessToken,
             'token_type': tokenType,
@@ -166,7 +166,7 @@ void main() {
       var body = '_' +
           jsonEncode({'token_type': 'bearer', 'access_token': 'access token'});
       var credentials = handle(
-          new http.Response(body, 200, headers: {'content-type': 'text/plain'}),
+          http.Response(body, 200, headers: {'content-type': 'text/plain'}),
           getParameters: (contentType, body) => jsonDecode(body.substring(1)));
       expect(credentials.accessToken, equals('access token'));
       expect(credentials.tokenEndpoint.toString(),
@@ -175,7 +175,7 @@ void main() {
 
     test('throws a FormatException if custom getParameters rejects response',
         () {
-      var response = new http.Response(
+      var response = http.Response(
           jsonEncode({
             'access_token': 'access token',
             'token_type': 'bearer',
@@ -188,7 +188,7 @@ void main() {
 
       expect(
           () => handle(response,
-              getParameters: (contentType, body) => throw new FormatException(
+              getParameters: (contentType, body) => throw FormatException(
                   'unsupported content-type: $contentType')),
           throwsFormatException);
     });
@@ -244,7 +244,7 @@ void main() {
     });
 
     test('with a custom scope delimiter sets the scopes', () {
-      var response = new http.Response(
+      var response = http.Response(
           jsonEncode({
             'access_token': 'access token',
             'token_type': 'bearer',
@@ -268,7 +268,7 @@ void main() {
         expiresIn,
         idToken = 'decode me',
         scope}) {
-      return handle(new http.Response(
+      return handle(http.Response(
           jsonEncode({
             'access_token': accessToken,
             'token_type': tokenType,

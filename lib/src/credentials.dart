@@ -81,12 +81,12 @@ class Credentials {
   /// called. However, since the client's expiration date is kept a few seconds
   /// earlier than the server's, there should be enough leeway to rely on this.
   bool get isExpired =>
-      expiration != null && new DateTime.now().isAfter(expiration);
+      expiration != null && DateTime.now().isAfter(expiration);
 
   /// Whether it's possible to refresh these credentials.
   bool get canRefresh => refreshToken != null && tokenEndpoint != null;
 
-  /// Creates a new set of credentials.
+  /// Creates a set of credentials.
   ///
   /// This class is usually not constructed directly; rather, it's accessed via
   /// [Client.credentials] after a [Client] is created by
@@ -114,7 +114,7 @@ class Credentials {
       this.expiration,
       String delimiter,
       Map<String, dynamic> getParameters(MediaType mediaType, String body)})
-      : scopes = new UnmodifiableListView(
+      : scopes = UnmodifiableListView(
             // Explicitly type-annotate the list literal to work around
             // sdk#24202.
             scopes == null ? <String>[] : scopes.toList()),
@@ -127,7 +127,7 @@ class Credentials {
   factory Credentials.fromJson(String json) {
     validate(condition, message) {
       if (condition) return;
-      throw new FormatException(
+      throw FormatException(
           "Failed to load credentials: $message.\n\n$json");
     }
 
@@ -164,10 +164,10 @@ class Credentials {
     if (expiration != null) {
       validate(expiration is int,
           'field "expiration" was not an int, was "$expiration"');
-      expiration = new DateTime.fromMillisecondsSinceEpoch(expiration);
+      expiration = DateTime.fromMillisecondsSinceEpoch(expiration);
     }
 
-    return new Credentials(parsed['accessToken'],
+    return Credentials(parsed['accessToken'],
         refreshToken: parsed['refreshToken'],
         idToken: parsed['idToken'],
         tokenEndpoint: tokenEndpoint,
@@ -190,7 +190,7 @@ class Credentials {
             expiration == null ? null : expiration.millisecondsSinceEpoch
       });
 
-  /// Returns a new set of refreshed credentials.
+  /// Returns a set of refreshed credentials.
   ///
   /// See [Client.identifier] and [Client.secret] for explanations of those
   /// parameters.
@@ -211,18 +211,18 @@ class Credentials {
     var scopes = this.scopes;
     if (newScopes != null) scopes = newScopes.toList();
     if (scopes == null) scopes = [];
-    if (httpClient == null) httpClient = new http.Client();
+    if (httpClient == null) httpClient = http.Client();
 
     if (identifier == null && secret != null) {
-      throw new ArgumentError("secret may not be passed without identifier.");
+      throw ArgumentError("secret may not be passed without identifier.");
     }
 
-    var startTime = new DateTime.now();
+    var startTime = DateTime.now();
     if (refreshToken == null) {
-      throw new StateError("Can't refresh credentials without a refresh "
+      throw StateError("Can't refresh credentials without a refresh "
           "token.");
     } else if (tokenEndpoint == null) {
-      throw new StateError("Can't refresh credentials without a token "
+      throw StateError("Can't refresh credentials without a token "
           "endpoint.");
     }
 
@@ -244,10 +244,10 @@ class Credentials {
         response, tokenEndpoint, startTime, scopes, _delimiter,
         getParameters: _getParameters);
 
-    // The authorization server may issue a new refresh token. If it doesn't,
+    // The authorization server may issue a refresh token. If it doesn't,
     // we should re-use the one we already have.
     if (credentials.refreshToken != null) return credentials;
-    return new Credentials(credentials.accessToken,
+    return Credentials(credentials.accessToken,
         refreshToken: this.refreshToken,
         idToken: credentials.idToken,
         tokenEndpoint: credentials.tokenEndpoint,

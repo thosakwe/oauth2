@@ -19,7 +19,7 @@ Map<String, dynamic> parseJsonParameters(MediaType contentType, String body) {
   if (contentType == null ||
       (contentType.mimeType != "application/json" &&
           contentType.mimeType != "text/javascript")) {
-    throw new FormatException(
+    throw FormatException(
         'Content-Type was "$contentType", expected "application/json"');
   }
 
@@ -28,6 +28,6 @@ Map<String, dynamic> parseJsonParameters(MediaType contentType, String body) {
     return untypedParameters;
   }
 
-  throw new FormatException(
+  throw FormatException(
       'Parameters must be a map, was "$untypedParameters"');
 }

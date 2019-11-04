@@ -17,8 +17,8 @@ void main() {
   ExpectClient client;
   oauth2.AuthorizationCodeGrant grant;
   setUp(() {
-    client = new ExpectClient();
-    grant = new oauth2.AuthorizationCodeGrant(
+    client = ExpectClient();
+    grant = oauth2.AuthorizationCodeGrant(
         'identifier',
         Uri.parse('https://example.com/authorization'),
         Uri.parse('https://example.com/token'),
@@ -49,7 +49,7 @@ void main() {
     });
 
     test('separates scopes with the correct delimiter', () {
-      var grant = new oauth2.AuthorizationCodeGrant(
+      var grant = oauth2.AuthorizationCodeGrant(
           'identifier',
           Uri.parse('https://example.com/authorization'),
           Uri.parse('https://example.com/token'),
@@ -80,7 +80,7 @@ void main() {
     });
 
     test('merges with existing query parameters', () {
-      grant = new oauth2.AuthorizationCodeGrant(
+      grant = oauth2.AuthorizationCodeGrant(
           'identifier',
           Uri.parse('https://example.com/authorization?query=value'),
           Uri.parse('https://example.com/token'),
@@ -156,7 +156,7 @@ void main() {
         expect(request.headers,
             containsPair("Authorization", "Basic aWRlbnRpZmllcjpzZWNyZXQ="));
 
-        return new Future.value(new http.Response(
+        return Future.value(http.Response(
             jsonEncode({
               'access_token': 'access token',
               'token_type': 'bearer',
@@ -198,7 +198,7 @@ void main() {
         expect(request.headers,
             containsPair("Authorization", "Basic aWRlbnRpZmllcjpzZWNyZXQ="));
 
-        return new Future.value(new http.Response(
+        return Future.value(http.Response(
             jsonEncode({
               'access_token': 'access token',
               'token_type': 'bearer',
@@ -217,8 +217,8 @@ void main() {
 
   group("with basicAuth: false", () {
     setUp(() {
-      client = new ExpectClient();
-      grant = new oauth2.AuthorizationCodeGrant(
+      client = ExpectClient();
+      grant = oauth2.AuthorizationCodeGrant(
           'identifier',
           Uri.parse('https://example.com/authorization'),
           Uri.parse('https://example.com/token'),
@@ -243,7 +243,7 @@ void main() {
               'client_secret': 'secret'
             }));
 
-        return new Future.value(new http.Response(
+        return Future.value(http.Response(
             jsonEncode({
               'access_token': 'access token',
               'token_type': 'bearer',
@@ -273,7 +273,7 @@ void main() {
               'client_secret': 'secret'
             }));
 
-        return new Future.value(new http.Response(
+        return Future.value(http.Response(
             jsonEncode({
               'access_token': 'access token',
               'token_type': 'bearer',
@@ -293,7 +293,7 @@ void main() {
   group('onCredentialsRefreshed', () {
     test('is correctly propagated', () async {
       var isCallbackInvoked = false;
-      var grant = new oauth2.AuthorizationCodeGrant(
+      var grant = oauth2.AuthorizationCodeGrant(
           'identifier',
           Uri.parse('https://example.com/authorization'),
           Uri.parse('https://example.com/token'),
@@ -305,7 +305,7 @@ void main() {
 
       grant.getAuthorizationUrl(redirectUrl);
       client.expectRequest((request) {
-        return new Future.value(new http.Response(
+        return Future.value(http.Response(
             jsonEncode({
               'access_token': 'access token',
               'token_type': 'bearer',
@@ -319,15 +319,15 @@ void main() {
       var oauth2Client = await grant.handleAuthorizationCode('auth code');
 
       client.expectRequest((request) {
-        return new Future.value(new http.Response(
+        return Future.value(http.Response(
             jsonEncode(
-                {'access_token': 'new access token', 'token_type': 'bearer'}),
+                {'access_token': 'access token', 'token_type': 'bearer'}),
             200,
             headers: {'content-type': 'application/json'}));
       });
 
       client.expectRequest((request) {
-        return new Future.value(new http.Response('good job', 200));
+        return Future.value(http.Response('good job', 200));
       });
 
       await oauth2Client.read(Uri.parse("http://example.com/resource"));

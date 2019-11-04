@@ -48,7 +48,7 @@ Future<Client> clientCredentialsGrant(
     Map<String, dynamic> getParameters(
         MediaType contentType, String body)}) async {
   delimiter ??= ' ';
-  var startTime = new DateTime.now();
+  var startTime = DateTime.now();
 
   var body = {"grant_type": "client_credentials"};
 
@@ -63,16 +63,17 @@ Future<Client> clientCredentialsGrant(
     }
   }
 
-  if (scopes != null && scopes.isNotEmpty)
+  if (scopes != null && scopes.isNotEmpty) {
     body['scope'] = scopes.join(delimiter);
+  }
 
-  if (httpClient == null) httpClient = new http.Client();
+  if (httpClient == null) httpClient = http.Client();
   var response = await httpClient.post(authorizationEndpoint,
       headers: headers, body: body);
 
   var credentials = await handleAccessTokenResponse(
       response, authorizationEndpoint, startTime, scopes, delimiter,
       getParameters: getParameters);
-  return new Client(credentials,
+  return Client(credentials,
       identifier: identifier, secret: secret, httpClient: httpClient);
 }

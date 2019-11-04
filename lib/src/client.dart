@@ -74,7 +74,7 @@ class Client extends http.BaseClient {
   /// The underlying HTTP client.
   http.Client _httpClient;
 
-  /// Creates a new client from a pre-existing set of credentials.
+  /// Creates a client from a pre-existing set of credentials.
   ///
   /// When authorizing a client for the first time, you should use
   /// [AuthorizationCodeGrant] or [resourceOwnerPasswordGrant] instead of
@@ -92,9 +92,9 @@ class Client extends http.BaseClient {
       http.Client httpClient})
       : _basicAuth = basicAuth,
         _onCredentialsRefreshed = onCredentialsRefreshed,
-        _httpClient = httpClient == null ? new http.Client() : httpClient {
+        _httpClient = httpClient == null ? http.Client() : httpClient {
     if (identifier == null && secret != null) {
-      throw new ArgumentError("secret may not be passed without identifier.");
+      throw ArgumentError("secret may not be passed without identifier.");
     }
   }
 
@@ -104,7 +104,7 @@ class Client extends http.BaseClient {
   /// sending the request if necessary.
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
     if (credentials.isExpired) {
-      if (!credentials.canRefresh) throw new ExpirationException(credentials);
+      if (!credentials.canRefresh) throw ExpirationException(credentials);
       await refreshCredentials();
     }
 
@@ -130,7 +130,7 @@ class Client extends http.BaseClient {
     var params = challenge.parameters;
     if (!params.containsKey('error')) return response;
 
-    throw new AuthorizationException(
+    throw AuthorizationException(
         params['error'],
         params['error_description'],
         params['error_uri'] == null ? null : Uri.parse(params['error_uri']));
@@ -149,7 +149,7 @@ class Client extends http.BaseClient {
     if (!credentials.canRefresh) {
       var prefix = "OAuth credentials";
       if (credentials.isExpired) prefix = "$prefix have expired and";
-      throw new StateError("$prefix can't be refreshed.");
+      throw StateError("$prefix can't be refreshed.");
     }
 
     _credentials = await credentials.refresh(

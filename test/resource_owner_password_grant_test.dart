@@ -24,7 +24,7 @@ var authEndpoint = Uri.parse('https://example.com');
 
 void main() {
   var expectClient;
-  setUp(() => expectClient = new ExpectClient());
+  setUp(() => expectClient = ExpectClient());
 
   group('basic', () {
     test('builds correct request with client when using basic auth for client',
@@ -34,7 +34,7 @@ void main() {
         expect(request.bodyFields['grant_type'], equals('password'));
         expect(request.bodyFields['username'], equals('username'));
         expect(request.bodyFields['password'], equals('userpass'));
-        return new http.Response(success, 200,
+        return http.Response(success, 200,
             headers: {'content-type': 'application/json'});
       });
 
@@ -48,7 +48,7 @@ void main() {
 
     test('passes the onCredentialsRefreshed callback to the client', () async {
       expectClient.expectRequest((request) async {
-        return new http.Response(
+        return http.Response(
             jsonEncode({
               "access_token": "2YotnFZFEjr1zCsicMWpAA",
               "token_type": "bearer",
@@ -69,15 +69,15 @@ void main() {
       });
 
       expectClient.expectRequest((request) {
-        return new Future.value(new http.Response(
+        return Future.value(http.Response(
             jsonEncode(
-                {'access_token': 'new access token', 'token_type': 'bearer'}),
+                {'access_token': 'access token', 'token_type': 'bearer'}),
             200,
             headers: {'content-type': 'application/json'}));
       });
 
       expectClient.expectRequest((request) {
-        return new Future.value(new http.Response('good job', 200));
+        return Future.value(http.Response('good job', 200));
       });
 
       await client.read(Uri.parse("http://example.com/resource"));
@@ -92,7 +92,7 @@ void main() {
         expect(request.bodyFields['client_secret'], equals('secret'));
         expect(request.bodyFields['username'], equals('username'));
         expect(request.bodyFields['password'], equals('userpass'));
-        return new http.Response(success, 200,
+        return http.Response(success, 200,
             headers: {'content-type': 'application/json'});
       });
 
@@ -112,7 +112,7 @@ void main() {
         expect(request.bodyFields['username'], equals('username'));
         expect(request.bodyFields['password'], equals('userpass'));
         expect(request.bodyFields['scope'], equals('one two'));
-        return new http.Response(success, 200,
+        return http.Response(success, 200,
             headers: {'content-type': 'application/json'});
       });
 
@@ -129,7 +129,7 @@ void main() {
         expect(request.bodyFields['username'], equals('username'));
         expect(request.bodyFields['password'], equals('userpass'));
         expect(request.bodyFields['scope'], equals('one,two'));
-        return new http.Response(success, 200,
+        return http.Response(success, 200,
             headers: {'content-type': 'application/json'});
       });
 
@@ -148,7 +148,7 @@ void main() {
         expect(request.bodyFields['username'], equals('username'));
         expect(request.bodyFields['password'], equals('userpass'));
         expect(request.url.queryParameters['query'], equals('value'));
-        return new http.Response(success, 200,
+        return http.Response(success, 200,
             headers: {'content-type': 'application/json'});
       });
 
